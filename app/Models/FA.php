@@ -13,7 +13,7 @@ class FA extends Model
     public $table = "fas";
 
     public function transition_tables(){
-        return $this->hasOne(Trasition_Table::class, 'fa_id');
+        return $this->hasOne(Transition_Table::class, 'fa_id');
     }
 
     public function stage(){

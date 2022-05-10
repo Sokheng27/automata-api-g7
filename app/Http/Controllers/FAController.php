@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\FA;
 use App\Models\State;
 use App\Models\Transition;
-use App\Models\Trasition_Table;
+use App\Models\Transition_Table;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -20,7 +20,7 @@ class FAController extends Controller
             $fa_id = session('fa_id');
 
             State::storeState($request->states);
-            Trasition_Table::storeTrasition_Table($fa_id);
+            Transition_Table::storeTrasition_Table($fa_id);
             $transition_table_id = session('transition_table_id');
             foreach ($request->transition_table as $key => $transition){
                 Transition::storeTransition($transition, $transition_table_id);
