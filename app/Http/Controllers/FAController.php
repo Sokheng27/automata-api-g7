@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\FACollection;
 use App\Models\FA;
 use App\Models\State;
 use App\Models\Transition;
@@ -11,6 +12,19 @@ use Illuminate\Support\Facades\DB;
 
 class FAController extends Controller
 {
+    public function getAllDFA(){
+
+        try {
+            $fa = FA::all();
+            return new FACollection($fa);
+        }catch (\Exception $e) {
+
+            DB::rollback();
+            return  $e->getMessage();
+        }
+
+    }
+
     public function DesignDFA(Request $request){
         DB::beginTransaction();
 
@@ -25,15 +39,13 @@ class FAController extends Controller
             foreach ($request->transition_table as $key => $transition){
                 Transition::storeTransition($transition, $transition_table_id);
             }
-            return 200;
+            return $this->ok($fa_id, 'Design DFA is Successfully');
             DB::commit();
             // all good
-        } catch (\Exception $e) {
-
+        }
+        catch (\Exception $exception) {
             DB::rollback();
-            return  $e->getMessage();
-            // something went wrong
-            return 404;
+            return $this->fail($exception->getMessage());
         }
     }
 
