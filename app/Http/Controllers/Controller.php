@@ -34,11 +34,12 @@ class Controller extends BaseController
      * @param int $code
      * @return \Illuminate\Http\JsonResponse
      */
-    public function fail($data, $code = 400)
+    public function fail($data, $message = "", $code = 400)
     {
         return response()->json([
             'success' => false,
-            'error' => $data
+            'data' => $data,
+            'message' => $message,
         ], $code);
     }
 }

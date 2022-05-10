@@ -7,7 +7,7 @@ use App\Models\Transition;
 use App\Models\Transition_Table;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class FACollection extends ResourceCollection
+class FAIDCollection extends ResourceCollection
 {
     /**
      * Transform the resource collection into an array.
@@ -17,6 +17,7 @@ class FACollection extends ResourceCollection
      */
     public function toArray($request)
     {
+
         $data = $this->collection->map(function($data) {
             return [
                 'fa_id' => $data->id,
