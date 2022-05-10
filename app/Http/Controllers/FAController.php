@@ -31,9 +31,9 @@ class FAController extends Controller
 
         try {
 
-            $fa = FA::StoreFA($request);
+            FA::StoreFA($request);
             $fa_id = session('fa_id');
-dd($fa_id);
+
             State::storeState($request->states);
             Transition_Table::storeTrasition_Table($fa_id);
             $transition_table_id = session('transition_table_id');
