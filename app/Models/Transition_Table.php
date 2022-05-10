@@ -20,11 +20,10 @@ class Transition_Table extends Model
         return $this->hasMany(Transition::class, 'transition_table_id');
     }
 
-    public function storeTrasition_Table($fa_id){
+    public static function storeTrasition_Table($fa_id){
         $transition_table = new Transition_Table();
         $transition_table->fa_id = $fa_id;
         $transition_table->save();
-        dd(123123);
         Session::put('transition_table_id', $transition_table->id);
 
     }
