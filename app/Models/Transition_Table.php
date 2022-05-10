@@ -24,6 +24,7 @@ class Transition_Table extends Model
         $transition_table = new Transition_Table();
         $transition_table->fa_id = $fa_id;
         $transition_table->save();
+        dd(123123);
         Session::put('transition_table_id', $transition_table->id);
 
     }

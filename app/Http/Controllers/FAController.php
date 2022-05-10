@@ -29,8 +29,9 @@ class FAController extends Controller
             DB::commit();
             // all good
         } catch (\Exception $e) {
-            return  $e->getMessage();
+
             DB::rollback();
+            return  $e->getMessage();
             // something went wrong
             return 404;
         }
