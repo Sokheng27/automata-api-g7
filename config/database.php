@@ -2,12 +2,6 @@
 
 use Illuminate\Support\Str;
 
-$url = parse_url(getenv("mysql://be04c48b89d856:977090bd@us-cdbr-east-05.cleardb.net/heroku_65f096e9df749f3?reconnect=true"));
-
-$host = $url["us-cdbr-east-05.cleardb.net"];
-$username = $url["be04c48b89d856"];
-$password = $url["977090bd"];
-$database = substr($url["heroku_65f096e9df749f3"], 1);
 return [
 
     /*
