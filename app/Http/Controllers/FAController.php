@@ -44,8 +44,8 @@ class FAController extends Controller
             }
             session()->forget('fa_id');
             session()->forget('transition_table_id');
-            return $this->ok($fa_id, 'Design DFA is Successfully');
             DB::commit();
+            return $this->ok($fa_id, 'Design DFA is Successfully');
             // all good
         } catch (\Exception $exception) {
             DB::rollback();
