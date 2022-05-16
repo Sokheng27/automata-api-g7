@@ -97,35 +97,31 @@ class FAController extends Controller
             $test = array();
             foreach ($symbols as $key => $symbol) {
                 $check_symbol = in_array($symbol, json_decode($fa->symbol));
+
                 if ($check_symbol == false) {
                     $symbol_not_founds[] = $symbol;
+                    return $this->fail($symbol, "This symbol not found");
                 }
 
                 if ($key == 0) {
-                    $from = $currentState->name;
+                    $from = json_encode($currentState);
                 } else {
-                    $from = $currentState->from_state_id;
-                }
-                    $currentState = $fa->transition_tables->transitions->where('input', $symbol)->where('from_state_id', $from);
-
-                    if ($currentState == null) {
-                        return [
-                            "data" => $currentState->name
-                        ];
+                    foreach (json_decode($currentState->from_state_id) as $from_state_id){
+                        $from = $from_state_id;
                     }
 
-                    $currentState = $fa->transition_tables->transitions;
-//                return $currentState;
-//                $currentState = $fa->transition_tables->transitions->where('input', $symbol);
                 }
 
-                return $currentState;
+                $currentState = $fa->transition_tables->transitions->where('input', $symbol)->where('from_state_id', $from)->first();
 
-//                foreach ($fa->transition_tables->transitions as $key => $transition) {
-//                    if (count(json_decode($transition->to_state_id)) == 0 || count(json_decode($transition->to_state_id)) > 1) {
-//                        $isDFA = false;
-//                    }
-//                }
+                if ($currentState == null) {
+
+                    return  $this->fail($from,"State not found ");
+                }
+dd($currentState->to_state_id);
+
+            }
+                return $currentState;
             }catch (\Exception $e) {
                 return $this->fail($e->getMessage());
         }

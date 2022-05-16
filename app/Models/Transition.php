@@ -13,14 +13,16 @@ class Transition extends Model
     protected $fillable = ['from_state_id', 'to_state_id', 'input', 'transition_table_id'];
 
     public static function storeTransition($transition, $transition_table_id){
+
         foreach ($transition as $value){
             self::create([
-                'from_state_id'   => $value['from'] ?? null,
+                'from_state_id'   => json_encode($value['from']) ?? null,
                 'input' => $value['input'] ?? null,
                 'to_state_id' => json_encode($value['to']) ?? null,
                 'transition_table_id' => $transition_table_id ?? null
             ]);
         }
+
     }
 
     public function checkTransitionLength($transition){
