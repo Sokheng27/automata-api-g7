@@ -63,7 +63,9 @@ class FAController extends Controller
             // Check if symbol include ε
             $check_symbol = in_array('ε', json_decode($fa->symbol));
             if ($check_symbol == true) {
-                return $this->fail(new FACollection(FA::where('id', $fa->id)->get()));
+                $isDFA = false;
+                return $isDFA;
+//                return $this->fail(new FACollection(FA::where('id', $fa->id)->get()));
             }
             foreach ($fa->transition_tables->transitions as $key => $transition) {
 
@@ -71,16 +73,22 @@ class FAController extends Controller
                     $isDFA = false;
                 }
             }
-            if ($isDFA == true) {
-                return $this->ok(new FACollection(FA::where('id', $fa->id)->get()));
-            } elseif ($isDFA == false) {
-                return $this->fail(new FACollection(FA::where('id', $fa->id)->get()));
-            }
+            return $isDFA;
 
         } catch (\Exception $e) {
             return $this->fail($e->getMessage());
         }
 
+    }
+
+    public function returnCheackFA(Request $request){
+        $isDFA = $this->CheackFA($request);
+        if ($isDFA == true) {
+            return $this->ok(new FACollection(FA::where('id', $request->fa_id)->get()), "DFA");
+        } elseif ($isDFA == false) {
+            return $this->fail(new FACollection(FA::where('id', $request->fa_id)->get()),"NFA");
+        }
+        return $isDFA;
     }
 
     public function acceptString(Request $request)
@@ -100,30 +108,47 @@ class FAController extends Controller
 
                 if ($check_symbol == false) {
                     $symbol_not_founds[] = $symbol;
+//                    return  [
+//                        'Staga' => $symbol,
+//                        'mess' =>  'This symbol not found'
+//                    ];
                     return $this->fail($symbol, "This symbol not found");
                 }
 
                 if ($key == 0) {
-                    $from = json_encode($currentState);
+                    $from = $currentState->name;
                 } else {
-                    foreach (json_decode($currentState->from_state_id) as $from_state_id){
-                        $from = $from_state_id;
-                    }
-
+                    $from = $currentState->from_state_id;
                 }
 
                 $currentState = $fa->transition_tables->transitions->where('input', $symbol)->where('from_state_id', $from)->first();
 
                 if ($currentState == null) {
-
-                    return  $this->fail($from,"State not found ");
+//                    return  [
+//                        'Staga' => $from,
+//                        'mess' =>  'Stage not found'
+//                    ];
+                    return $this->fail($from, "Stage not found");
                 }
-dd($currentState->to_state_id);
+
+                if(count(json_decode($currentState->to_state_id)) == 0 ){
+                    $accepted = false;
+                }
 
             }
-                return $currentState;
+                return $accepted;
             }catch (\Exception $e) {
                 return $this->fail($e->getMessage());
         }
+    }
+
+    public function returnacceptString(Request $request){
+        $result = $this->acceptString($request);
+        if($result === true){
+            return $this->ok(new FACollection(FA::where('id', $request->fa_id)->get()),'Accepted');
+        }elseif ($result === false){
+            return $this->fail(new FACollection(FA::where('id', $request->fa_id)->get()),'Rejected');
+        }
+        return $result;
     }
 }

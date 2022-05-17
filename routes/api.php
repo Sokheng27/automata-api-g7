@@ -22,5 +22,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::get('/getAllDFA', [FAController::class, 'getAllDFA']);
 Route::post('/DesignDFA', [FAController::class, 'DesignDFA']);
-Route::get('/CheackFA', [FAController::class, 'CheackFA']);
-Route::post('/acceptString', [FAController::class, 'acceptString']);
+Route::get('/CheackFA', [FAController::class, 'returnCheackFA']);
+Route::post('/acceptString', [FAController::class, 'returnacceptString']);
