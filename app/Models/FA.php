@@ -28,6 +28,21 @@ class FA extends Model
         }
         $fa->save();
         Session::put('fa_id', $fa->id);
+
+    }
+
+
+    public static function savenewFA($request){
+
+        $fa = new FA();
+        if($request->symbol != null){
+            $fa->symbol = json_encode($request->symbol);
+        }
+        $fa->save();
+        dd($fa->symbol);
+        Session::put('fa_id', $fa->id);
+
+        Session::put('fa_symbol', $fa->symbol);
     }
 
     public function checksymbol($symbol, $fa_symbol){

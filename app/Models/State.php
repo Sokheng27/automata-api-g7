@@ -31,4 +31,17 @@ class State extends Model
             ]);
         }
     }
+
+    public static function NewState()
+    {
+        $newstate = self::create([
+            'name'   => "q0" ,
+            'is_start' => 1 ,
+            'is_final' => 0,
+            'is_dead' => 0,
+            'fa_id' => session('fa_id') ?? 0,
+        ]);
+
+        return $newstate;
+    }
 }

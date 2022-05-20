@@ -84,9 +84,9 @@ class FAController extends Controller
     public function returnCheackFA(Request $request){
         $isDFA = $this->CheackFA($request);
         if ($isDFA == true) {
-            return $this->ok(new FACollection(FA::where('id', $request->fa_id)->get()), "DFA");
+            return $this->ok(new FACollection(FA::where('id', $request->fa_id)->get()), "Deterministic Finite Automaton (DFA)");
         } elseif ($isDFA == false) {
-            return $this->fail(new FACollection(FA::where('id', $request->fa_id)->get()),"NFA");
+            return $this->fail(new FACollection(FA::where('id', $request->fa_id)->get()),"Nondeterministic Finite Automaton (DFA)");
         }
         return $isDFA;
     }
@@ -150,5 +150,43 @@ class FAController extends Controller
             return $this->fail(new FACollection(FA::where('id', $request->fa_id)->get()),'Rejected');
         }
         return $result;
+    }
+
+    public function NFATODFA(Request $request){
+
+        $isDFA = $this->CheackFA($request);
+
+        if ($isDFA == true) {
+            return $this->ok(new FACollection(FA::where('id', $request->fa_id)->get()), "The is DFA Not NFA");
+        }
+
+        FA::savenewFA($request);
+        $fa_id = session('fa_id');
+        $fa_symbol = session('fa_symbol');
+
+        Transition_Table::storeTrasition_Table($fa_id);
+        $transition_table_id = session('transition_table_id');
+
+        $implementedStates =  [];
+        $statesToRun =  [];
+        $createdStates = [];
+
+        $newState = State::NewState();
+
+
+        $createdStates[] = $newState;
+        $statesToRun[] = $newState;
+        $implementedStates[] = $newState;
+
+
+        while(count($statesToRun) > 0){
+            $currentState = $statesToRun[0];
+
+            if($currentState->is_dead == 0){
+
+            }
+            return $currentState->is_dead;
+        }
+
     }
 }
