@@ -14,7 +14,7 @@ class CreateFASTable extends Migration
     public function up()
     {
         Schema::create('fas', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id');
             $table->string('symbol')->nullable();
             $table->timestamps();
         });

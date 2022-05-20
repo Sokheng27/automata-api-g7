@@ -96,58 +96,40 @@ class FAController extends Controller
         try {
             $accepted = true;
             $fa = FA::where('id', $request->fa_id)->first();
-
             $currentState = $fa->stage->where('fa_id', $fa->id)->where('is_start', 1)->first();
-
             $symbols = str_split($request->text);
-
             $symbol_not_founds = array();
             $test = array();
             foreach ($symbols as $key => $symbol) {
                 $check_symbol = in_array($symbol, json_decode($fa->symbol));
-
                 if ($check_symbol == false) {
                     $symbol_not_founds[] = $symbol;
-//                    return  [
-//                        'Staga' => $symbol,
-//                        'mess' =>  'This symbol not found'
-//                    ];
                     return $this->fail($symbol, "This symbol not found");
                 }
-
                 if ($key == 0) {
                     $from = $currentState->name;
                 } else {
                     $from = $currentState->from_state_id;
                 }
-
                 $currentState = $fa->transition_tables->transitions->where('input', $symbol)->where('from_state_id', $from)->first();
-
                 if ($currentState == null) {
-//                    return  [
-//                        'Staga' => $from,
-//                        'mess' =>  'Stage not found'
-//                    ];
                     return $this->fail($from, "Stage not found");
                 }
-
                 if(count(json_decode($currentState->to_state_id)) == 0 ){
                     $accepted = false;
                 }
-
             }
                 return $accepted;
             }catch (\Exception $e) {
                 return $this->fail($e->getMessage());
         }
     }
-
     public function returnacceptString(Request $request){
         $result = $this->acceptString($request);
         if($result === true){
-            return $this->ok(new FACollection(FA::where('id', $request->fa_id)->get()),'Accepted');
+            return $this->ok(new FACollection(FA::where('id', $request->fa_id)->get()),'This string Accepted');
         }elseif ($result === false){
-            return $this->fail(new FACollection(FA::where('id', $request->fa_id)->get()),'Rejected');
+            return $this->fail(new FACollection(FA::where('id', $request->fa_id)->get()),'This string Rejected');
         }
         return $result;
     }
@@ -160,9 +142,10 @@ class FAController extends Controller
             return $this->ok(new FACollection(FA::where('id', $request->fa_id)->get()), "The is DFA Not NFA");
         }
 
-        FA::savenewFA($request);
+        FA::StoreFA($request);
         $fa_id = session('fa_id');
-        $fa_symbol = session('fa_symbol');
+        $fa_symbol = FA::where('id', $request->fa_id)->pluck('symbol');
+        
 
         Transition_Table::storeTrasition_Table($fa_id);
         $transition_table_id = session('transition_table_id');
