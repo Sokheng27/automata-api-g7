@@ -11,26 +11,7 @@ class State extends Model
     use HasFactory;
     public $table = "states";
 
-    protected $fillable = ['id','name', 'is_start', 'is_final', 'is_dead', 'fa_id'];
-
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::creating(function ($post) {
-            $post->{$post->getKeyName()} = (string) Str::uuid();
-        });
-    }
-
-    public function getIncrementing()
-    {
-        return false;
-    }
-
-    public function getKeyType()
-    {
-        return 'string';
-    }
+    protected $fillable = ['name', 'is_start', 'is_final', 'is_dead', 'fa_id'];
 
     public function FA(){
         return $this->belongsTo(FA::class);
