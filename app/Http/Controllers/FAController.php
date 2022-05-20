@@ -86,7 +86,7 @@ class FAController extends Controller
         if ($isDFA == true) {
             return $this->ok(new FACollection(FA::where('id', $request->fa_id)->get()), "Deterministic Finite Automaton (DFA)");
         } elseif ($isDFA == false) {
-            return $this->fail(new FACollection(FA::where('id', $request->fa_id)->get()),"Nondeterministic Finite Automaton (DFA)");
+            return $this->fail(new FACollection(FA::where('id', $request->fa_id)->get()),"Nondeterministic Finite Automaton (NFA)");
         }
         return $isDFA;
     }
