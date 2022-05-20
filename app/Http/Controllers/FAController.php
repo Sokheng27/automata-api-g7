@@ -102,11 +102,11 @@ class FAController extends Controller
             $symbol_not_founds = array();
             $test = array();
             foreach ($symbols as $key => $symbol) {
-                $check_symbol = in_array($symbol, json_decode($fa->symbol));
-                if ($check_symbol == false) {
-                    $symbol_not_founds[] = $symbol;
-                    return $this->fail($symbol, "This symbol not found");
-                }
+//                $check_symbol = in_array($symbol, json_decode($fa->symbol));
+//                if ($check_symbol == false) {
+//                    $symbol_not_founds[] = $symbol;
+//                    return $this->fail($symbol, "This symbol not found");
+//                }
                 if ($key == 0) {
                     $from = $currentState->name;
                 } else {
