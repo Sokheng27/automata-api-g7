@@ -61,7 +61,7 @@ class FAController extends Controller
             $fa = FA::where('id', $request->fa_id)->first();
 
             // Check if symbol include ε
-            $check_symbol = in_array(' ', json_decode($fa->symbol));
+            $check_symbol = in_array("", json_decode($fa->symbol));
 
             if ($check_symbol == true) {
                 $isDFA = false;
