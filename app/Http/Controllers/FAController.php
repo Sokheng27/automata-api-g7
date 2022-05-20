@@ -61,13 +61,13 @@ class FAController extends Controller
             $fa = FA::where('id', $request->fa_id)->first();
 
             // Check if symbol include ε
-            $check_symbol = in_array("", json_decode($fa->symbol));
-
-            if ($check_symbol == true) {
-                $isDFA = false;
-                return $isDFA;
-//                return $this->fail(new FACollection(FA::where('id', $fa->id)->get()));
-            }
+//            $check_symbol = in_array("", json_decode($fa->symbol));
+//
+//            if ($check_symbol == true) {
+//                $isDFA = false;
+//                return $isDFA;
+////                return $this->fail(new FACollection(FA::where('id', $fa->id)->get()));
+//            }
             foreach ($fa->transition_tables->transitions as $key => $transition) {
 
                 if (count(json_decode($transition->to_state_id)) == 0 || count(json_decode($transition->to_state_id)) > 1) {
